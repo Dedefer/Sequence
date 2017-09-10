@@ -114,9 +114,8 @@ public:
         T* tempArr = new T[_len + 1];
         for (auto i = 0; i < _len; ++i) {tempArr[i] = std::move(_arrPtr[i]);}
         tempArr[_len++] = obj;
-        auto arrToDelete = _arrPtr;
+        delete [] _arrPtr;
         _arrPtr = tempArr;
-        delete [] arrToDelete;
     }
 
     void prepend(const T& obj) override {insertAt(0, obj);}
@@ -136,9 +135,8 @@ public:
                 tempArr[i + difference] = std::move(_arrPtr[i]);
             }
             ++_len;
-            auto arrToDelete = _arrPtr;
+            delete [] _arrPtr;
             _arrPtr = tempArr;
-            delete [] arrToDelete;
         } else {throw std::out_of_range("index is out of range");}
     }
 
@@ -151,9 +149,8 @@ public:
                 else {--difference;}
             }
             _len += difference;
-            auto arrToDelete = _arrPtr;
+            delete [] _arrPtr;
             _arrPtr = tempArr;
-            delete [] arrToDelete;
         }
     }
 
