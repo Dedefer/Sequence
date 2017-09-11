@@ -32,7 +32,7 @@ public:
 
     virtual void insertAt(size_t, const T&) = 0;
 
-    virtual void remove(const T&) noexcept = 0;
+    virtual void remove(const T&) = 0;
 
     virtual void clear() noexcept = 0;
 

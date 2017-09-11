@@ -148,7 +148,7 @@ public:
         throw std::out_of_range("index is out of range");
     }
 
-    void remove(const T& value) noexcept override {
+    void remove(const T& value) override {
         for (auto nodePtr = _leftEnd; nodePtr; nodePtr = nodePtr -> rightNode) {
             if (value == nodePtr -> value) {
                 if (nodePtr -> leftNode) {

@@ -140,7 +140,7 @@ public:
         } else {throw std::out_of_range("index is out of range");}
     }
 
-    void remove(const T& value) noexcept override {
+    void remove(const T& value) override {
         if (_len) {
             T* tempArr = new T[_len - 1];
             int difference = 0;
