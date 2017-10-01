@@ -21,6 +21,8 @@ public:
 
     virtual T operator[](size_t) const = 0;
 
+    virtual const T& getConst(size_t) const = 0;
+
     virtual T getFirst() const = 0;
 
     virtual T getLast() const = 0;

@@ -69,7 +69,9 @@ public:
 
     bool isEmpty() const noexcept override {return !_len;}
 
-    T get(size_t index) const override {
+    T get(size_t index) const override {return getConst(index);}
+
+    const T& getConst(size_t index) const override {
         if (index >= 0 && index < _len) {
             auto nodePtr = _leftEnd;
             for (auto i = 0; i < index; ++i) {
@@ -79,7 +81,6 @@ public:
         }
         throw std::out_of_range("index is out of range");
     }
-
 
     T operator[](size_t index) const override {return get(index);}
 
@@ -182,13 +183,15 @@ public:
 
     void swap(size_t index1, size_t index2) override {
         if (index1 >= 0 && index1 < _len && index2 >= 0 && index2 < _len) {
-            auto nodePtr1 = _leftEnd;
-            auto nodePtr2 = _leftEnd;
-            for (auto i = 0; i < index1; ++i) {nodePtr1 = nodePtr1 -> rightNode;}
-            for (auto i = 0; i < index2; ++i) {nodePtr2 = nodePtr2 -> rightNode;}
-            auto tempObj = std::move(nodePtr1 -> value);
-            nodePtr1 -> value = std::move(nodePtr2 -> value);
-            nodePtr2 -> value = std::move(tempObj);
+            if (index1 != index2) {
+                auto nodePtr1 = _leftEnd;
+                auto nodePtr2 = _leftEnd;
+                for (auto i = 0; i < index1; ++i) { nodePtr1 = nodePtr1->rightNode; }
+                for (auto i = 0; i < index2; ++i) { nodePtr2 = nodePtr2->rightNode; }
+                auto tempObj = std::move(nodePtr1->value);
+                nodePtr1->value = std::move(nodePtr2->value);
+                nodePtr2->value = std::move(tempObj);
+            }
         } else {throw std::out_of_range("indices are out of range");}
     }
 

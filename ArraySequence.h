@@ -87,6 +87,11 @@ public:
         throw std::out_of_range("index is out of range");
     }
 
+    const T& getConst(size_t index) const override {
+        if (index >= 0 && index < _len) {return _arrPtr[index];}
+        throw std::out_of_range("index is out of range");
+    }
+
 
     T operator[](size_t index) const override {return get(index);}
 
@@ -167,9 +172,11 @@ public:
 
     void swap(size_t index1, size_t index2) override {
         if (index1 >= 0 && index1 < _len && index2 >= 0 && index2 < _len) {
-            auto tempObj = std::move(_arrPtr[index1]);
-            _arrPtr[index1] = std::move(_arrPtr[index2]);
-            _arrPtr[index2] = std::move(tempObj);
+            if (index1 != index2) {
+                auto tempObj = std::move(_arrPtr[index1]);
+                _arrPtr[index1] = std::move(_arrPtr[index2]);
+                _arrPtr[index2] = std::move(tempObj);
+            }
         } else {throw std::out_of_range("indices are out of range");}
     }
 
