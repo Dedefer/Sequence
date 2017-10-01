@@ -34,7 +34,13 @@ public:
 
     virtual void remove(const T&) = 0;
 
+    virtual Sequence<T>* getSubsequence(size_t, size_t) const = 0;
+
     virtual void clear() noexcept = 0;
+
+    virtual Sequence<T>* copy() const = 0;
+
+    virtual void swap(size_t, size_t) = 0;
 
     virtual ~Sequence() = default;
 };

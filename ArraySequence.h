@@ -87,6 +87,7 @@ public:
         throw std::out_of_range("index is out of range");
     }
 
+
     T operator[](size_t index) const override {return get(index);}
 
     T getFirst() const override {
@@ -99,13 +100,13 @@ public:
         throw std::out_of_range("sequence is empty");
     }
 
-    ArraySequence<T> getSubsequence(size_t startIndex, size_t endIndex) const {
+    Sequence<T>* getSubsequence(size_t startIndex, size_t endIndex) const override {
         if (startIndex >= 0 && endIndex < _len && startIndex <= endIndex) {
-            ArraySequence<T> tempObj;
-            tempObj._len = endIndex - startIndex + 1;
-            tempObj._arrPtr = new T[tempObj._len];
-            for (auto i = startIndex; i <= endIndex; ++i) {tempObj._arrPtr[i - startIndex] = _arrPtr[i];}
-            return std::move(tempObj);
+            ArraySequence<T>* tempObjPtr = new ArraySequence<T>;
+            tempObjPtr -> _len = endIndex - startIndex + 1;
+            tempObjPtr -> _arrPtr = new T[tempObjPtr -> _len];
+            for (auto i = startIndex; i <= endIndex; ++i) {tempObjPtr -> _arrPtr[i - startIndex] = _arrPtr[i];}
+            return tempObjPtr;
         }
         throw std::out_of_range("indices are out of range");
     }
@@ -154,10 +155,22 @@ public:
         }
     }
 
+    Sequence<T>* copy() const override {
+        return new ArraySequence<T>{*this};
+    }
+
     void clear() noexcept override {
         delete [] _arrPtr;
         _arrPtr = nullptr;
         _len = 0;
+    }
+
+    void swap(size_t index1, size_t index2) override {
+        if (index1 >= 0 && index1 < _len && index2 >= 0 && index2 < _len) {
+            auto tempObj = std::move(_arrPtr[index1]);
+            _arrPtr[index1] = std::move(_arrPtr[index2]);
+            _arrPtr[index2] = std::move(tempObj);
+        } else {throw std::out_of_range("indices are out of range");}
     }
 
 

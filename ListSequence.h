@@ -80,6 +80,7 @@ public:
         throw std::out_of_range("index is out of range");
     }
 
+
     T operator[](size_t index) const override {return get(index);}
 
     T getFirst() const override {
@@ -92,18 +93,18 @@ public:
         throw std::out_of_range("sequence is empty");
     }
 
-    ListSequence<T> getSubsequence(size_t startIndex, size_t endIndex) const {
+    Sequence<T>* getSubsequence(size_t startIndex, size_t endIndex) const override {
         if (startIndex >= 0 && endIndex < _len && startIndex <= endIndex) {
             auto nodePtr = _leftEnd;
             for (auto i = 0; i < startIndex; ++i) {
                 nodePtr = nodePtr -> rightNode;
             }
-            ListSequence<T> tempObj;
+            ListSequence<T>* tempObjPtr = new ListSequence<T>;
             for (auto i = startIndex; i < (endIndex + 1); ++i) {
-                tempObj.append(nodePtr -> value);
+                tempObjPtr -> append(nodePtr -> value);
                 nodePtr = nodePtr -> rightNode;
             }
-            return std::move(tempObj);
+            return tempObjPtr;
         }
         throw std::out_of_range("indices are out of range");
     }
@@ -173,6 +174,22 @@ public:
         }
         _rightEnd = _leftEnd = nullptr;
         _len = 0;
+    }
+
+    Sequence<T>* copy() const override {
+        return new ListSequence<T>{*this};
+    }
+
+    void swap(size_t index1, size_t index2) override {
+        if (index1 >= 0 && index1 < _len && index2 >= 0 && index2 < _len) {
+            auto nodePtr1 = _leftEnd;
+            auto nodePtr2 = _leftEnd;
+            for (auto i = 0; i < index1; ++i) {nodePtr1 = nodePtr1 -> rightNode;}
+            for (auto i = 0; i < index2; ++i) {nodePtr2 = nodePtr2 -> rightNode;}
+            auto tempObj = std::move(nodePtr1 -> value);
+            nodePtr1 -> value = std::move(nodePtr2 -> value);
+            nodePtr2 -> value = std::move(tempObj);
+        } else {throw std::out_of_range("indices are out of range");}
     }
 
 private:

@@ -96,7 +96,7 @@ public:
             check(true, "get(3) throws exception");
         }
 
-        std::unique_ptr<Sequence<int>> sampleCpy = std::make_unique<SequenceType>(*dynamic_cast<SequenceType*>(sample.get()));
+        std::unique_ptr<Sequence<int>> sampleCpy{sample -> copy()};
 
         check(true, "_________CREATING COPY SEQUENCE________");
 
@@ -133,15 +133,16 @@ public:
 
         check(sampleMoveDest -> getLength() == 3, "Length of dest is equal 3");
 
-        SequenceType subSeqOfSample = dynamic_cast<SequenceType*>(sample.get()) -> getSubsequence(1,1);
+
+        std::unique_ptr<Sequence<int>> subSeqOfSample{sample -> getSubsequence(1,1)};
 
         check(true, "_________CREATING SUBSEQUENCE________");
 
-        check(subSeqOfSample.getFirst() == 23, "First element of Subsequence(1,1) is equal 23");
+        check(subSeqOfSample -> getFirst() == 23, "First element of Subsequence(1,1) is equal 23");
 
-        check(subSeqOfSample.getLast() == 23, "Last element of Subsequence(1,1) is equal 23");
+        check(subSeqOfSample -> getLast() == 23, "Last element of Subsequence(1,1) is equal 23");
 
-        try {dynamic_cast<SequenceType*>(sample.get()) -> getSubsequence(2,1);} catch (std::exception&) {
+        try {sample -> getSubsequence(2,1);} catch (std::exception&) {
             check(true, "Subsequence(2,1) throws exception");
         }
 
